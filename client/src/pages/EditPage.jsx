@@ -2,13 +2,13 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import { Navigate, useNavigate } from "react-router-dom";
 import PageShell from "../components/PageShell";
+import { getAuthHeaders } from "../utils/authSession";
 import { getStoredQuestions, refreshQuestions } from "../utils/testSession";
 
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || "http://localhost:5001/api";
 
 export default function EditPage() {
   const navigate = useNavigate();
-  const user = JSON.parse(localStorage.getItem("purplezoneUser") || "null");
   const [questions, setQuestions] = useState(getStoredQuestions());
   const [answers, setAnswers] = useState([]);
   const [loadingQuestions, setLoadingQuestions] = useState(!getStoredQuestions().length);
@@ -53,9 +53,10 @@ export default function EditPage() {
 
     try {
       const { data } = await axios.post(`${API_BASE_URL}/submissions`, {
-        userId: user?._id,
         questionIds: questions.map((question) => question.id),
         answers
+      }, {
+        headers: getAuthHeaders()
       });
 
       sessionStorage.setItem("purplezoneLatestResult", JSON.stringify(data));

@@ -4,6 +4,7 @@ import axios from "axios";
 import AuthForm from "../components/AuthForm";
 import Logo from "../components/Logo";
 import sunsetImage from "../assets/images/sunset-5536777_1920.png";
+import { setAuthSession } from "../utils/authSession";
 import { refreshQuestions } from "../utils/testSession";
 
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || "http://localhost:5001/api";
@@ -46,7 +47,7 @@ export default function AuthPage() {
 
       const { data } = await axios.post(`${API_BASE_URL}${endpoint}`, payload);
 
-      localStorage.setItem("purplezoneUser", JSON.stringify(data.user));
+      setAuthSession({ user: data.user, token: data.token });
       await refreshQuestions();
       navigate("/test");
     } catch (requestError) {

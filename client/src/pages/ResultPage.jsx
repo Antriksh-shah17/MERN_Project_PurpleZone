@@ -2,11 +2,12 @@ import { Navigate, useNavigate } from "react-router-dom";
 import PageShell from "../components/PageShell";
 import successIcon from "../assets/icons/Group 3.png";
 import failIcon from "../assets/icons/Group 5.png";
+import { getStoredUser } from "../utils/authSession";
 
 export default function ResultPage() {
   const navigate = useNavigate();
   const storedResult = sessionStorage.getItem("purplezoneLatestResult");
-  const user = JSON.parse(localStorage.getItem("purplezoneUser") || "null");
+  const user = getStoredUser();
 
   if (!storedResult) {
     return <Navigate to="/test" replace />;

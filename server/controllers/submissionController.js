@@ -14,11 +14,8 @@ export function getQuestions(_request, response) {
 
 export async function submitAnswers(request, response, next) {
   try {
-    const { userId, questionIds, answers } = request.body;
-
-    if (!userId || !Array.isArray(questionIds) || !Array.isArray(answers) || questionIds.length !== 3 || answers.length !== 3 || questionIds.length !== answers.length) {
-      return response.status(400).json({ message: "A valid user and three answers are required." });
-    }
+    const { questionIds, answers } = request.body;
+    const userId = request.user.userId;
 
     const user = await User.findById(userId);
     if (!user) {

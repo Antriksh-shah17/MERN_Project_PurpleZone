@@ -1,12 +1,13 @@
 import { useNavigate } from "react-router-dom";
 import Logo from "./Logo";
+import { clearAuthSession } from "../utils/authSession";
 import { clearTestSession } from "../utils/testSession";
 
 export default function PageShell({ children, stageClassName = "" }) {
   const navigate = useNavigate();
 
   const handleLogout = () => {
-    localStorage.removeItem("purplezoneUser");
+    clearAuthSession();
     clearTestSession();
     navigate("/", { replace: true });
   };

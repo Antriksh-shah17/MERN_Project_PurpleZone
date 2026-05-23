@@ -1,4 +1,5 @@
 import axios from "axios";
+import { getAuthHeaders } from "./authSession";
 
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || "http://localhost:5001/api";
 const QUESTIONS_KEY = "purplezoneCurrentQuestions";
@@ -16,7 +17,9 @@ export function clearTestSession() {
 }
 
 export async function refreshQuestions() {
-  const { data } = await axios.get(`${API_BASE_URL}/submissions/questions`);
+  const { data } = await axios.get(`${API_BASE_URL}/submissions/questions`, {
+    headers: getAuthHeaders()
+  });
   sessionStorage.setItem(QUESTIONS_KEY, JSON.stringify(data.questions));
   sessionStorage.removeItem(DRAFT_KEY);
   sessionStorage.removeItem(RESULT_KEY);

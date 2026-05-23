@@ -31,9 +31,15 @@ app.use((error, _request, response, _next) => {
 });
 
 const mongoUri = process.env.MONGODB_URI;
+const jwtSecret = process.env.JWT_SECRET;
 
 if (!mongoUri) {
   console.error("MongoDB connection failed: MONGODB_URI is not set. Create server/.env from server/.env.example.");
+  process.exit(1);
+}
+
+if (!jwtSecret) {
+  console.error("Server startup failed: JWT_SECRET is not set. Create server/.env from server/.env.example.");
   process.exit(1);
 }
 

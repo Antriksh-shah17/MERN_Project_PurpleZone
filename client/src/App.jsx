@@ -3,10 +3,10 @@ import AuthPage from "./pages/AuthPage";
 import TestPage from "./pages/TestPage";
 import EditPage from "./pages/EditPage";
 import ResultPage from "./pages/ResultPage";
+import { isAuthenticated } from "./utils/authSession";
 
 function ProtectedRoute({ children }) {
-  const storedUser = localStorage.getItem("purplezoneUser");
-  return storedUser ? children : <Navigate to="/" replace />;
+  return isAuthenticated() ? children : <Navigate to="/" replace />;
 }
 
 export default function App() {

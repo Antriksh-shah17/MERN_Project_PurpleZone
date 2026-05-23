@@ -36,7 +36,7 @@ export default function TestPage() {
           onClick={() => navigate("/edit")}
           disabled={questions.length !== 3}
         >
-          Next
+          Edit
         </button>
       </section>
     </PageShell>

@@ -1,5 +1,6 @@
 import bcrypt from "bcryptjs";
 import User from "../models/User.js";
+import { signAuthToken } from "../utils/jwt.js";
 
 function sanitizeUser(user) {
   return {
@@ -12,14 +13,6 @@ function sanitizeUser(user) {
 export async function registerUser(request, response, next) {
   try {
     const { name, email, password } = request.body;
-
-    if (!name || !email || !password) {
-      return response.status(400).json({ message: "All fields are required." });
-    }
-
-    if (password.length < 6) {
-      return response.status(400).json({ message: "Password must be at least 6 characters." });
-    }
 
     const existingUser = await User.findOne({ email: email.toLowerCase() });
     if (existingUser) {
@@ -36,7 +29,8 @@ export async function registerUser(request, response, next) {
 
     return response.status(201).json({
       message: "Registration successful.",
-      user: sanitizeUser(user)
+      user: sanitizeUser(user),
+      token: signAuthToken(user)
     });
   } catch (error) {
     return next(error);
@@ -46,10 +40,6 @@ export async function registerUser(request, response, next) {
 export async function loginUser(request, response, next) {
   try {
     const { email, password } = request.body;
-
-    if (!email || !password) {
-      return response.status(400).json({ message: "Email and password are required." });
-    }
 
     const user = await User.findOne({ email: email.toLowerCase() });
     if (!user) {
@@ -63,7 +53,8 @@ export async function loginUser(request, response, next) {
 
     return response.json({
       message: "Login successful.",
-      user: sanitizeUser(user)
+      user: sanitizeUser(user),
+      token: signAuthToken(user)
     });
   } catch (error) {
     return next(error);
